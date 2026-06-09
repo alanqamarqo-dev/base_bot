@@ -15,12 +15,12 @@ from telegram import Bot, InputMediaPhoto
 from telegram.constants import ParseMode
 from telegram.error import TelegramError
 
-from ..charts.chart_generator import ChartGenerator, ChartResult
-from ..analyzers.security_score import SecurityScoreResult
-from ..analyzers.honeypot_checker import HoneypotResult
-from ..analyzers.holders_checker import HoldersResult
-from ..analyzers.liquidity_checker import LiquidityCheckResult
-from ..analyzers.github_checker import GitHubResult
+from charts.chart_generator import ChartGenerator, ChartResult
+from analyzers.security_score import SecurityScoreResult
+from analyzers.honeypot_checker import HoneypotResult
+from analyzers.holders_checker import HoldersResult
+from analyzers.liquidity_checker import LiquidityCheckResult
+from analyzers.github_checker import GitHubResult
 
 logger = logging.getLogger(__name__)
 

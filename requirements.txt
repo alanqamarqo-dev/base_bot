@@ -1,8 +1,12 @@
-# Base Chain Token Scanner Bot - Dependencies
-# =============================================
+# Base Launch Detector - Dependencies
+# =====================================
 
 # Core async HTTP
 aiohttp>=3.9.0
+
+# Web3 + WebSocket for blockchain interaction
+web3>=7.0.0
+websockets>=13.0
 
 # Telegram Bot API
 python-telegram-bot>=21.0
@@ -11,7 +15,10 @@ python-telegram-bot>=21.0
 matplotlib>=3.8.0
 numpy>=1.26.0
 
-# SQLite is built-in (no extra dependency)
+# API Server
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.0.0
 
 # Testing
 pytest>=8.0.0
@@ -20,9 +27,3 @@ pytest-mock>=3.12.0
 
 # Utilities
 python-dotenv>=1.0.0
-
-# Scheduling (optional, for cron-like execution)
-# APScheduler>=3.10.0
-
-# Web server for health checks (optional)
-# aiohttp>=3.9.0  # already listed above

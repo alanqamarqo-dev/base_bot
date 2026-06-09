@@ -8,11 +8,11 @@ Provides token security analysis modules:
 - Liquidity Lock (UNCX/Unicrypt)
 - GitHub Repository Analysis
 """
-from .security_score import SecurityScoreChecker, SecurityScoreResult, MockSecurityScoreChecker
-from .honeypot_checker import HoneypotChecker, HoneypotResult, MockHoneypotChecker
-from .holders_checker import HoldersChecker, HoldersResult, HolderInfo, MockHoldersChecker
-from .liquidity_checker import LiquidityChecker, LiquidityCheckResult, LiquidityLockInfo, MockLiquidityChecker
-from .github_checker import GitHubChecker, GitHubResult, MockGitHubChecker
+from analyzers.security_score import SecurityScoreChecker, SecurityScoreResult, MockSecurityScoreChecker
+from analyzers.honeypot_checker import HoneypotChecker, HoneypotResult, MockHoneypotChecker
+from analyzers.holders_checker import HoldersChecker, HoldersResult, HolderInfo, MockHoldersChecker
+from analyzers.liquidity_checker import LiquidityChecker, LiquidityCheckResult, LiquidityLockInfo, MockLiquidityChecker
+from analyzers.github_checker import GitHubChecker, GitHubResult, MockGitHubChecker
 
 __all__ = [
     "SecurityScoreChecker",

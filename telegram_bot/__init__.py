@@ -1,3 +1,3 @@
-from .sender import TelegramSender
+from telegram_bot.sender import TelegramSender
 
 __all__ = ["TelegramSender"]

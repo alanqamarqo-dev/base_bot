@@ -12,7 +12,8 @@ main (الإصدار النهائي)
     ├─→ feature/charts (الرسوم البيانية)
     ├─→ feature/database (قاعدة البيانات)
     ├─→ feature/telegram_bot (تيليجرام)
-    └─→ feature/tests (الاختبارات)
+    ├─→ feature/tests (الاختبارات)
+    └─→ feature/monitors (نظام المراقبة المباشر) ⭐ NEW
 ```
 
 ---
@@ -215,6 +216,65 @@ test/
 test: إضافة اختبارات للماسح
 ci: تحسين تكوين CI/CD
 test: محاكاة API متقدمة
+```
+
+---
+
+## ⚡ **feature/monitors** ⭐ NEW
+
+### المحتوى:
+```
+monitors/
+├── pair_monitor.py            # منسق المراقبة الرئيسي
+├── aerodrome_factory.py       # مستمع Aerodrome PoolCreated
+├── uniswap_factory.py         # مستمع Uniswap V3 PoolCreated
+├── liquidity_monitor.py       # مراقب Mint/Burn/Swap
+├── risk_scanner.py            # ماسح المخاطر (يربط المحللات)
+└── momentum_engine.py         # محرك الزخم (Buy/Sell/Volume)
+
+decision/
+├── scoring.py                 # Momentum Score 0-100
+└── classifier.py              # تصنيف SKIP/WATCH/EARLY GEM
+
+alerts/
+└── alert_manager.py           # مدير التنبيهات (11 نوع)
+
+api/
+└── server.py                  # FastAPI + WebSocket
+
+config/
+├── __init__.py                # إعدادات النظام (.env)
+├── contracts.py               # عناوين العقود + ABI + Events
+└── known_wallets.py           # محافظ Smart Money/Snipers
+
+main_monitor.py                # Orchestrator الرئيسي
+```
+
+### المسؤولية:
+- ✅ مراقبة Base chain مباشرة عبر WebSocket
+- ✅ اكتشاف الأزواج الجديدة فور إنشائها
+- ✅ تتبع السيولة والأحداث (Mint/Burn/Swap)
+- ✅ تحليل سريع باستخدام المحللات الموجودة
+- ✅ حساب Momentum Score وتصنيف SKIP/WATCH/EARLY GEM
+- ✅ كشف الحيتان والـ Smart Money والسنابرز
+- ✅ إرسال تنبيهات Telegram + بث WebSocket
+- ✅ توفير REST API كاملة
+
+### متى تعمل عليه:
+```
+• إضافة منصة DEX جديدة
+• تحسين كشف الحيتان
+• تطوير نظام الدرجات
+• إضافة أنواع تنبيهات جديدة
+• تحسين أداء WebSocket
+```
+
+### أمثلة commits:
+```
+feat: إضافة مراقب Aerodrome Factory
+feat: نظام تصنيف SKIP/WATCH/EARLY GEM
+feat: كشف Smart Money والسنابرز
+feat: FastAPI مع WebSocket live stream
 ```
 
 ---
