@@ -1,14 +1,47 @@
-# 🚀 Base Chain Token Scanner Bot
+# 🚀 Base Launch Detector v2.0
 
-A comprehensive Telegram bot that automatically scans, analyzes, and reports on new tokens launched on the **Base** blockchain every day.
+**نظامان في مشروع واحد:**
 
-## 📋 Features
+| النظام | الملف | النوع |
+|--------|-------|-------|
+| 🕐 **Daily Scanner** | `main.py` | مسح يومي عبر DexScreener API |
+| ⚡ **Real-time Monitor** | `main_monitor.py` | مراقبة مباشرة عبر Base RPC WebSocket |
+
+---
+
+## ⚡ Real-time Monitor (الجديد)
+
+نظام مراقبة مباشر يستمع لأحداث البلوكشين فور حدوثها:
+
+```
+Base RPC WS → Pair Monitor → Liquidity Monitor → Risk Scanner
+            → Momentum Engine → Decision Engine → Telegram + API
+```
+
+### الميزات الجديدة
+
+| الميزة | الوصف |
+|--------|-------|
+| 🎧 **مراقبة المصانع** | يستمع لأحداث PoolCreated من Aerodrome + Uniswap V3 |
+| 💧 **اكتشاف السيولة** | يراقب أول إضافة سيولة ونوعها (WETH/USDC/cbBTC) |
+| 🛡️ **تحليل سريع** | يشغل 4 محللات concurrently في أقل من 2 ثانية |
+| 📊 **محرك الزخم** | يحسب Buy/Sell Count + Volume + Ratio بعد 5 دقائق |
+| 💎 **تصنيف ذكي** | SKIP / WATCH / EARLY GEM |
+| 🐋 **كشف الحيتان** | يراقب المشترين الكبار (>5%) |
+| 🧠 **Smart Money** | يتعقب محافظ المتداولين المحترفين |
+| 🎯 **كشف السنابرز** | يكتشف الشراء في البلوكات الأولى |
+| 🌐 **API Server** | FastAPI مع REST + WebSocket |
+| 🔔 **تنبيهات** | 11 نوع تنبيه مع تنسيق Telegram |
+
+---
+
+## 🕐 Daily Scanner (الموجود)
 
 | Feature | Description |
 |---------|-------------|
 | 🔍 **Token Discovery** | Scans DexScreener API for newly listed Base chain tokens |
 | 🛡️ **Security Score** | GoPlus Security API integration — 0-100 safety gauge with risk flags |
-| 🍯 **Honeypot Detection** | Honeypot.is API — detects if token prevents selling |
+| 🍯 **Honeypot Detection** | Detects if token prevents selling |
 | 👥 **Holder Distribution** | Analyzes wallet concentration via Basescan/CoinGecko |
 | 🔒 **Liquidity Lock** | Verifies UNCX lock status and lock timelines |
 | 💻 **GitHub Analysis** | Scores repository legitimacy (stars, activity, license) |
@@ -16,31 +49,52 @@ A comprehensive Telegram bot that automatically scans, analyzes, and reports on 
 | 📨 **Telegram Delivery** | Sends positive tokens with full charts, negative with warnings |
 | 💾 **Persistent Storage** | SQLite database for token history and daily scan tracking |
 
-## 🏗️ Architecture
+## 🏗️ Architecture (Full)
 
 ```
-project/sr/
-├── main.py                    # Orchestrator: scan → analyze → chart → send
-├── scanner/
+base_bot/
+├── main_monitor.py            # ⚡ Real-time Pipeline Orchestrator (NEW)
+├── main.py                    # 🕐 Daily Batch Scanner (existing)
+│
+├── monitors/                  # ⭐ NEW: Real-time monitoring
+│   ├── pair_monitor.py            # Main pair monitor orchestrator
+│   ├── aerodrome_factory.py       # Aerodrome PoolCreated listener
+│   ├── uniswap_factory.py         # Uniswap V3 PoolCreated listener
+│   ├── liquidity_monitor.py       # Mint/Burn/Swap tracker
+│   ├── risk_scanner.py            # Fast concurrent risk analysis
+│   └── momentum_engine.py         # Buy/Sell/Volume tracker
+│
+├── decision/                  # ⭐ NEW: Scoring & Classification
+│   ├── scoring.py                 # Momentum Score 0-100
+│   └── classifier.py             # SKIP / WATCH / EARLY GEM
+│
+├── alerts/                    # ⭐ NEW: Alert System
+│   └── alert_manager.py          # Telegram + WebSocket dispatcher
+│
+├── api/                       # ⭐ NEW: REST + WebSocket API
+│   └── server.py                 # FastAPI server
+│
+├── config/                    # ⭐ NEW: Central Configuration
+│   ├── __init__.py               # Settings (env vars)
+│   ├── contracts.py              # Contract addresses, ABIs, topics
+│   └── known_wallets.py          # Smart Money / Sniper wallets
+│
+├── scanner/                   # ✅ Existing
 │   ├── base_scanner.py        # DexScreener token discovery
 │   └── dex_scanner.py         # Extended DexScreener queries
-├── analyzers/
-│   ├── security_score.py      # GoPlus Safety Score (0-100 gauge)
-│   ├── honeypot_checker.py    # Honeypot.is detection
-│   ├── holders_checker.py     # Holder distribution analysis
-│   ├── liquidity_checker.py   # UNCX liquidity lock verification
-│   └── github_checker.py      # GitHub repository legitimacy
-├── charts/
-│   └── chart_generator.py     # Matplotlib charts (gauge, pie, timeline)
-├── database/
-│   └── storage.py             # SQLite storage layer
-├── telegram_bot/
-│   └── sender.py              # Telegram message formatting & sending
+├── analyzers/                 # ✅ Existing (untouched)
+│   ├── security_score.py      # GoPlus Safety Score (0-100)
+│   ├── honeypot_checker.py    # Honeypot detection
+│   ├── holders_checker.py     # Holder distribution
+│   ├── liquidity_checker.py   # UNCX liquidity lock
+│   └── github_checker.py      # GitHub legitimacy
+├── charts/                    # ✅ Existing
+├── database/                  # ✅ Existing
+├── telegram_bot/              # ✅ Existing
 ├── test/                      # Unit & integration tests
-├── docs/                      # Documentation per module
-├── requirements.txt           # Python dependencies
-├── .env.example               # Environment configuration template
-└── README.md                  # This file
+├── docs/                      # Full docs per module
+├── .env.example               # Environment config
+└── requirements.txt
 ```
 
 ## 🔧 Installation
@@ -65,7 +119,6 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # 3. Install dependencies
-pip install -r requirements.txt
 
 # 4. Configure environment
 cp .env.example .env
@@ -381,14 +434,23 @@ pytest test/ --cov=. --cov-report=html
 
 ## 📚 التوثيقات التفصيلية
 
-كل وحدة لها توثيق عربي كامل:
-
+### الوحدات القديمة
 - **[📡 الماسح](docs/docs_scanner.md)** - اكتشاف التوكنات
 - **[🛡️ المحللات](docs/docs_analyzers.md)** - التحليلات الخمس
 - **[📊 الرسوم](docs/docs_charts.md)** - إنشاء الصور
 - **[💾 قاعدة البيانات](docs/docs_database.md)** - التخزين
 - **[📨 تيليجرام](docs/docs_telegram_bot.md)** - الإرسال
 - **[🧪 الاختبارات](docs/docs_test.md)** - الاختبار
+
+### الوحدات الجديدة
+- **[🎧 المراقبون](docs/docs_monitors.md)** - نظام المراقبة المباشر
+- **[⚡ نظام القرار](docs/docs_decision.md)** - Scoring + Classification
+- **[🌐 API](docs/docs_api.md)** - REST + WebSocket
+- **[🔔 التنبيهات](docs/docs_alerts.md)** - نظام التنبيهات
+- **[⚙️ الإعدادات](docs/docs_config.md)** - التكوين والعقود
+
+### التخطيط
+- **[📋 الخطة المعمارية](plans/base_monitor_plan.md)** - خطة البناء الكاملة
 
 ---
 

@@ -1,3 +1,3 @@
-from .storage import Database
+from database.storage import Database
 
 __all__ = ["Database"]
